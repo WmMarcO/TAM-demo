@@ -95,52 +95,6 @@ const oktaJwtVerifier = new OktaJwtVerifier({
       attributes
     });
   });
-/*
-  app.get('/tokens', oidc.ensureAuthenticated(), (req, res) => {
-    // Convert the userinfo object into an attribute array, for rendering with mustache
-    const tokens = req.userContext && req.userContext.tokens;
-    const attributes = Object.entries(tokens);
-
-  const atclaims= oktaJwtVerifier.verifyAccessToken(tokens.access_token, audience)
-.then(jwt => {
-  // the token is valid (per definition of 'valid' above)
-  console.log('AT Claims');
-  console.log(jwt.header);
-  console.log(jwt.claims);
-  return jwt.claims;
-})
-.catch(err => {
-  // a validation failed, inspect the error
-  console.log('Failed1')
-});
-const idclaims = oktaJwtVerifier.verifyIdToken(tokens.id_token, sampleConfig.oidc.clientId)
-.then(jwt => {
-  // the token is valid (per definition of 'valid' above)
-  console.log('ID Claims');
-  console.log(jwt.header);
-  console.log(jwt.claims);
-  return jwt.claims;
-})
-.catch(err => {
-  // a validation failed, inspect the error
-  console.log('Failed2')
-});
-console.log('exports');
-console.log(idclaims);
-console.log(atclaims);
-
-
-    res.render('tokens', {
-      isLoggedIn: !!tokens,
-      userinfo: tokens,
-      attributes,
-      idclaims,
-      atclaims
-
-    });
-  });
-*/
-
 
 // Make the route handler function async
 app.get('/tokens', oidc.ensureAuthenticated(), async (req, res) => {
@@ -184,9 +138,6 @@ console.log(accessTokenJwt.claims);
     res.status(400).send('Token validation failed. Please try logging in again.');
   }
 });
-
-
-
 
 
 
