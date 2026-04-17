@@ -95,54 +95,10 @@ const oktaJwtVerifier = new OktaJwtVerifier({
       attributes
     });
   });
-/*
-  app.get('/tokens', oidc.ensureAuthenticated(), (req, res) => {
-    // Convert the userinfo object into an attribute array, for rendering with mustache
-    const tokens = req.userContext && req.userContext.tokens;
-    const attributes = Object.entries(tokens);
-
-  const atclaims= oktaJwtVerifier.verifyAccessToken(tokens.access_token, audience)
-.then(jwt => {
-  // the token is valid (per definition of 'valid' above)
-  console.log('AT Claims');
-  console.log(jwt.header);
-  console.log(jwt.claims);
-  return jwt.claims;
-})
-.catch(err => {
-  // a validation failed, inspect the error
-  console.log('Failed1')
-});
-const idclaims = oktaJwtVerifier.verifyIdToken(tokens.id_token, sampleConfig.oidc.clientId)
-.then(jwt => {
-  // the token is valid (per definition of 'valid' above)
-  console.log('ID Claims');
-  console.log(jwt.header);
-  console.log(jwt.claims);
-  return jwt.claims;
-})
-.catch(err => {
-  // a validation failed, inspect the error
-  console.log('Failed2')
-});
-console.log('exports');
-console.log(idclaims);
-console.log(atclaims);
 
 
-    res.render('tokens', {
-      isLoggedIn: !!tokens,
-      userinfo: tokens,
-      attributes,
-      idclaims,
-      atclaims
-
-    });
-  });
-*/
-
-
-// Make the route handler function async
+  
+// Token route handler function async
 app.get('/tokens', oidc.ensureAuthenticated(), async (req, res) => {
   const tokens = req.userContext && req.userContext.tokens;
   const attributes = Object.entries(tokens);
@@ -157,39 +113,36 @@ app.get('/tokens', oidc.ensureAuthenticated(), async (req, res) => {
     // Await the ID token verification and get the full JWT object
     const idTokenJwt = await oktaJwtVerifier.verifyIdToken(tokens.id_token, sampleConfig.oidc.clientId);
     const idclaims = Object.entries(idTokenJwt.claims);
+    
+    // Print claims to log for debug
+    console.log('exports');
+    console.log('ID Token');
+    console.log(idTokenJwt.header);
+    console.log(idTokenJwt.claims);
+    console.log('Access Token');
+    console.log(accessTokenJwt.header);
+    console.log(accessTokenJwt.claims);
 
-console.log('exports');
-console.log('ID Token');
-console.log(idTokenJwt.header);
-console.log(idTokenJwt.claims);
-console.log('Access Token');
-console.log(accessTokenJwt.header);
-console.log(accessTokenJwt.claims);
 
-
-    // Now that both promises have resolved, render the page
+    // Render the page
     res.render('tokens', {
       isLoggedIn: !!tokens,
       userinfo: tokens,
       attributes,
-      test: 'Decoded Token Values',
-      idclaims,  // This will now be the actual claims object
-      atclaims   // This will also be the claims object
+      test: 'Decoded Token Values', // Text line break
+      idclaims,  // ID token claims object
+      atclaims   // Access token claims object
     });
 
   } catch (error) {
-    // If either token fails verification, this block will be executed
+    // If either token fails verification, send error
     console.error('Token verification failed:', error);
-    // You should render an error page or send an error response
     res.status(400).send('Token validation failed. Please try logging in again.');
   }
 });
 
 
-
-
-
-
+  
   oidc.on('ready', () => {
     // eslint-disable-next-line no-console
     app.listen(sampleConfig.port, () => console.log(`App started on port ${sampleConfig.port}`));
