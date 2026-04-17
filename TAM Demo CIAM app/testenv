@@ -1,0 +1,12 @@
+```ini
+#Issuer
+#ISSUER=https://wmotam.oktapreview.com//oauth2/default
+ISSUER=https://wmotam.oktapreview.com/oauth2/ausxo39x6aljRTYDP1d7
+# Web app
+CLIENT_ID=0oaxnzn0920qQOgPN1d7
+CLIENT_SECRET=Hw33NoT0ymVqwv8Ei3ls-jOgnROmSg_aqIfkJg3-CZurFnfMlvXzmFA_MwvYQ2Bu
+
+# SPA app
+SPA_CLIENT_ID=0oaxnyqzi1HBrxCxa1d7
+
+```
